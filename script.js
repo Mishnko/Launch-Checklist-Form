@@ -23,8 +23,6 @@ window.addEventListener("load", function() {
          });
    init();
 });
-/*
-*/
 
    function init() {
       const form = document.querySelector("form");
@@ -43,18 +41,18 @@ window.addEventListener("load", function() {
       const cargoStatus = document.getElementById('cargoStatus');
       const launchStatus = document.getElementById("launchStatus");
 
-      form.addEventListener("submit", function(event) {
-         if (pilotInput.value === "" ||  copilotInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value ==="") {
-            alert("All fields are required");
-               event.preventDefault();
-         } else if (isNaN(fuelLevelInput.value) === true || isNaN(cargoMassInput.value) === true) { 
-            alert("Fuel Level and Cargo Mass must be numbers.");
-               event.preventDefault();
-         }
-        
-         pilotStatus.innerHTML = `Pilot ${pilotInput.value} Ready`
-         copilotStatus.innerHTML = `Co-pilot ${copilotInput.value} Ready`
+      function reset () {
+         faultyItems.style.visibility = "hidden";
+         launchStatus.innerHTML = `Awaiting Information Before Launch`;
+         launchStatus.style.color = "black";
+         pilotStatus.innerHTML = `Pilot Ready`
+         copilotStatus.innerHTML =`Co-pilot Ready`
+         fuelStatus.innerHTML = `Fuel level high enough for launch`;
+         cargoStatus.innerHTML = `Cargo mass low enough for launch`;
+         console.log('Reset function runs');
+      }
 
+      function updateStatus () {
          if (fuelLevelInput.value < 10000) {
             faultyItems.style.visibility = "visible";
             fuelStatus.innerHTML = `Not enough fuel.`;
@@ -67,7 +65,7 @@ window.addEventListener("load", function() {
             launchStatus.style.color = "red";
             launchStatus.innerHTML = `Shuttle not ready for launch.`;
             event.preventDefault();
-          } else {
+         } else {
             faultyItems.style.visibility = "hidden";
             launchStatus.style.color = "green";
             launchStatus.innerHTML = `Shuttle is ready for launch.`;
@@ -75,18 +73,24 @@ window.addEventListener("load", function() {
             fuelStatus.innerHTML = `Fuel level high enough for launch.`;
             event.preventDefault();
          }
-      });    
+      }
 
+      form.addEventListener("submit", function(event) {
+         if (pilotInput.value === "" ||  copilotInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value ==="") {
+            reset();
+            alert("All fields are required");
+            event.preventDefault();
+         } else if (isNaN(fuelLevelInput.value) === true || isNaN(cargoMassInput.value) === true) { 
+            reset();
+            alert("Fuel Level and Cargo Mass must be numbers.");
+            event.preventDefault();
+         } else {
+            updateStatus();
+         }
+         pilotStatus.innerHTML = `Pilot ${pilotInput.value} Ready`
+         copilotStatus.innerHTML = `Co-pilot ${copilotInput.value} Ready`
+
+
+      });    
 }
 
-/* This block of code shows how to format the HTML once you fetch some planetary JSON!
-<h2>Mission Destination</h2>
-<ol>
-   <li>Name: ${}</li>
-   <li>Diameter: ${}</li>
-   <li>Star: ${}</li>
-   <li>Distance from Earth: ${}</li>
-   <li>Number of Moons: ${}</li>
-</ol>
-<img src="${}">
-*/
