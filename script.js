@@ -53,7 +53,15 @@ window.addEventListener("load", function() {
       }
 
       function updateStatus () {
-         if (fuelLevelInput.value < 10000) {
+         if (fuelLevelInput.value < 10000 && cargoMassInput.value > 10000) {
+            faultyItems.style.visibility = "visible";
+            cargoStatus.innerHTML = `Cargo too Heavy.`;
+            fuelStatus.innerHTML = `Not enough fuel.`;
+            cargoStatus.innerHTML = `Cargo too Heavy.`;
+            launchStatus.style.color = "red";
+            launchStatus.innerHTML = (`Shuttle not ready for launch.`);
+            event.preventDefault();  
+         } else if (fuelLevelInput.value < 10000) {
             faultyItems.style.visibility = "visible";
             fuelStatus.innerHTML = `Not enough fuel.`;
             launchStatus.style.color = "red";
@@ -66,7 +74,7 @@ window.addEventListener("load", function() {
             launchStatus.innerHTML = `Shuttle not ready for launch.`;
             event.preventDefault();
          } else {
-            faultyItems.style.visibility = "hidden";
+            faultyItems.style.visibility = "visible";
             launchStatus.style.color = "green";
             launchStatus.innerHTML = `Shuttle is ready for launch.`;
             cargoStatus.innerHTML = `Cargo mass low enough for launch.`;
@@ -74,9 +82,10 @@ window.addEventListener("load", function() {
             event.preventDefault();
          }
       }
+         
 
       form.addEventListener("submit", function(event) {
-         if (pilotInput.value === "" ||  copilotInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value ==="") {
+         if (pilotInput.value === "" || copilotInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value ==="") {
             reset();
             alert("All fields are required");
             event.preventDefault();
@@ -84,13 +93,16 @@ window.addEventListener("load", function() {
             reset();
             alert("Fuel Level and Cargo Mass must be numbers.");
             event.preventDefault();
+         } else if (isNaN(pilotInput.value) === false || isNaN(copilotInput.value) === false) {
+            reset();
+            alert("Pilot and Co-Pilot must not be numbers");
+            event.preventDefault();            
          } else {
             updateStatus();
          }
          pilotStatus.innerHTML = `Pilot ${pilotInput.value} Ready`
          copilotStatus.innerHTML = `Co-pilot ${copilotInput.value} Ready`
-
-
       });    
 }
+
 
